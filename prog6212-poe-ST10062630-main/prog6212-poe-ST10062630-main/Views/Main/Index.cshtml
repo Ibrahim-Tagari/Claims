@@ -1,0 +1,52 @@
+﻿@model List<ST10062630_PROG6212_POE.Models.Claim>
+
+<h2>Submit a Claim</h2>
+
+@if (ViewBag.Roles == null || !(ViewBag.Roles as List<ST10062630_PROG6212_POE.Models.UserRole>).Any())
+{
+    <p style="color: red;">No roles available. Please contact the administrator to add roles.</p>
+}
+else
+{
+    <form asp-action="SubmitClaim" enctype="multipart/form-data" method="post">
+        <label>Lecturer:</label>
+        <input type="text" name="Lecturer" required />
+
+        <label>Select Role:</label>
+        <select name="roleName" required>
+            @foreach (var role in ViewBag.Roles as List<ST10062630_PROG6212_POE.Models.UserRole>)
+            {
+                <option value="@role.RoleName">@role.RoleName</option>
+            }
+        </select>
+
+
+        <label>Hours Worked:</label>
+        <input type="number" name="HoursWorked" required id="hoursWorked" />
+
+        <label>Hourly Rate:</label>
+        <input type="number" step="0.01" name="HourlyRate" required id="hourlyRate" />
+
+        <label>Amount:</label>
+        <input type="text" id="amount" readonly />
+
+        <label>Notes:</label>
+        <textarea name="Notes"></textarea>
+
+        <label>Upload Document:</label>
+        <input type="file" name="DocumentPath" required />
+
+        <button type="submit">Submit</button>
+    </form>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#hoursWorked, #hourlyRate').on('input', function () {
+            var hours = parseFloat($('#hoursWorked').val()) || 0;
+            var rate = parseFloat($('#hourlyRate').val()) || 0;
+            $('#amount').val((hours * rate).toFixed(2));
+        });
+    });
+</script>

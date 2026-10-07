@@ -1,0 +1,56 @@
+﻿@model List<ST10062630_PROG6212_POE.Models.Claim>
+
+<h2>Approve or Reject Claims</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="error-message">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="success-message">@TempData["SuccessMessage"]</div>
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>Claim ID</th>
+            <th>Role</th>
+            <th>Lecturer</th>
+            <th>Hours Worked</th>
+            <th>Amount</th>
+            <th>Notes</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in Model)
+        {
+            <tr>
+                <td>@claim.ClaimId</td>
+                <td>@claim.RoleName</td>
+                <td>@claim.Lecturer</td>
+                <td>@claim.HoursWorked</td>
+                <td>@claim.Amount</td>
+                <td>@claim.Notes</td>
+                <td>@claim.Status</td>
+                <td>
+                    @if (claim.Status == "Pending")
+                    {
+                        <form asp-action="UpdateStatus" method="post">
+                            <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                            <button type="submit" name="action" value="Approve">Approve</button>
+                            <button type="submit" name="action" value="Reject">Reject</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span>Already @claim.Status</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
